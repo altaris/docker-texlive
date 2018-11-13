@@ -1,6 +1,10 @@
 docker-texlive
 ==============
 
+[![Docker Build Status](https://img.shields.io/docker/build/altaris/docker-texlive.svg)](https://hub.docker.com/r/altaris/docker-texlive/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/altaris/docker-texlive.svg)](https://hub.docker.com/r/altaris/docker-texlive/)
+[![GitHub](https://img.shields.io/github/license/altaris/docker-texlive.svg)](https://choosealicense.com/licenses/mit/)
+
 A dockerized texlive compiler.
 
 # Usage
@@ -47,10 +51,3 @@ The compilation script reads the following environment variables:
     - `-l $WORKING_DIR/$PROJECT_NAME.ilg`
 * `MAKEINDEX` (default: none): Builds index using the indicated compiler. If the value is `yes`, then `makeindex` is used. If none is specified, this step is skipped.
 * `WORKING_DIR` (default: `/tmp/tex`): Directory where auxiliary files are written. If value is `no`, then this variable is set to the directory of `$FILE`.
-
-# TODOs
-
-- [X] Better script for build sequences
-- [X] Separate build files from source files
-- [ ] Put build files in a temporary volume
-- [X] Use environment variables to tweak build
