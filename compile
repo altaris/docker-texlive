@@ -33,9 +33,19 @@ fi
 
 FILE_NAME="$(basename $FILE)"
 PROJECT_NAME="$(basename $FILE_NAME .tex)"
-WORKINGDIR="$(dirname $(readlink -f $FILE))"
+PROJECT_DIR="$(dirname $(readlink -f $FILE))"
 
 SIMPLERUN="yes" # If the compiler should be run more than once
+
+# =============================================================================
+# Working dir
+# =============================================================================
+
+if [ "$WORKING_DIR" = "no" ]; then
+    WORKING_DIR="$PROJECT_DIR"
+else
+    WORKING_DIR="${WORKING_DIR:-/tmp/tex}"
+fi
 
 # =============================================================================
 # Bibliography
@@ -50,7 +60,11 @@ if [ -n "$BIBLIOGRAPHY" ]; then
 fi
 
 bibliography() {
-    $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$PROJECT_NAME.aux"
+    local MODE=p
+    if [ "$WORKING_DIR" != "$PROJECT_DIR" ]; then
+        MODE=a
+    fi
+    openout_any=$MODE $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$WORKING_DIR"/"$PROJECT_NAME.aux"
 }
 
 # =============================================================================
@@ -59,7 +73,7 @@ bibliography() {
 
 COMPILER="${COMPILER:-xelatex}"
 COMPILER_PATH="$(_get_and_check_binary "$COMPILER")"
-COMPILER_FLAGS="-interaction=nonstopmode $COMPILER_FLAGS"
+COMPILER_FLAGS="-interaction=nonstopmode -output-directory $WORKING_DIR $COMPILER_FLAGS"
 
 compile() {
     $COMPILER $COMPILER_FLAGS "$FILE_NAME"
@@ -77,8 +91,10 @@ if [ -n "$MAKEINDEX" ]; then
     SIMPLERUN="no"
 fi
 
+MAKEINDEX_FLAGS="-o $WORKING_DIR/$PROJECT_NAME.ind -l $WORKING_DIR/$PROJECT_NAME.ilg"
+
 makeindex() {
-    $MAKEINDEX $MAKEINDEX_FLAGS "$PROJECT_NAME.idx"
+    $MAKEINDEX $MAKEINDEX_FLAGS "$WORKING_DIR"/"$PROJECT_NAME.idx"
 }
 
 # =============================================================================
@@ -87,7 +103,8 @@ makeindex() {
 
 echo "
 --------------------------------------------------
-Working directory:  $WORKINGDIR
+Project directory:  $PROJECT_DIR
+Working directory:  $WORKING_DIR
 File:               $FILE_NAME
 Compiler:           $COMPILER_PATH
 Compiler flags:     $COMPILER_FLAGS
@@ -99,7 +116,9 @@ Makeindex flags:    $MAKEINDEX_FLAGS
 --------------------------------------------------
 "
 
-cd $WORKINGDIR
+mkdir --parents "$WORKING_DIR"
+
+cd $PROJECT_DIR
 
 compile || _fail
 
@@ -116,3 +135,7 @@ if [ "$SIMPLERUN" = "no" ]; then
 fi
 
 compile || _fail
+
+if [ "$WORKING_DIR" != "$PROJECT_DIR" ]; then
+    cp "$WORKING_DIR"/"$PROJECT_NAME.pdf" .
+fi

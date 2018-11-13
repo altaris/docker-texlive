@@ -28,15 +28,20 @@ The compilation script reads the following environment variables:
 
 * `BIBLIOGRAPHY_FLAGS` (default: none): Additional flags for the bibliography compiler.
 * `BIBLIOGRAPHY` (default: none): Compiles bibliography using the indicated compiler (e.g. `bibtex`, `bibtex8`). If the value is `yes`, then `bibtex` is used. If none is specified, this step is skipped.
-* `COMPILER_FLAGS` (default: none): Additional flags for the compiler. Note that the following flags are automatically prepended: `-interaction=nonstopmode`.
+* `COMPILER_FLAGS` (default: none): Additional flags for the compiler. Note that the following flags are automatically prepended:
+    - `-interaction=nonstopmode`
+    - `-output-directory $WORKING_DIR`.
 * `COMPILER` (default: `xelatex`): Name of the compiler to use.
 * `FILE` (default: `/var/tex/main.tex`): Absolute or relative `.tex` file path.
-* `MAKEINDEX_FLAGS` (default: none): Additional flags for the index compiler.
+* `MAKEINDEX_FLAGS` (default: none): Additional flags for the index compiler. Note that the following flags are automatically prepended:
+    - `-o $WORKING_DIR/$PROJECT_NAME.ind`, where `PROJECT_NAME` is `$FILE` without the path and the `.tex`
+    - `-l $WORKING_DIR/$PROJECT_NAME.ilg`
 * `MAKEINDEX` (default: none): Builds index using the indicated compiler. If the value is `yes`, then `makeindex` is used. If none is specified, this step is skipped.
+* `WORKING_DIR` (default: `/tmp/tex`): Directory where auxiliary files are written. If value is `no`, then this variable is set to the directory of `$FILE`.
 
 # TODOs
 
 - [X] Better script for build sequences
-- [ ] Separate build files from source files
+- [X] Separate build files from source files
 - [ ] Put build files in a temporary volume
 - [X] Use environment variables to tweak build
