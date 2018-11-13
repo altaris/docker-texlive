@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# =============================================================================
+# Utilities
+# =============================================================================
+
 _get_and_check_binary() {
     BINARY_PATH="$(which $1)"
     if [ $? != 0 ]; then
@@ -12,21 +16,25 @@ _get_and_check_binary() {
     echo $BINARY_PATH
 }
 
+# =============================================================================
+# File & project
+# =============================================================================
+
 FILE="${FILE:-/var/tex/main.tex}"
 if [ ! -r "$FILE" ]; then
     echo "File $FILE is not readable"
     exit 1
 fi
 
-COMPILER="${COMPILER:-xelatex}"
-COMPILER_PATH="$(_get_and_check_binary "$COMPILER")"
-
 FILE_NAME="$(basename $FILE)"
 PROJECT_NAME="$(basename $FILE_NAME .tex)"
 WORKINGDIR="$(dirname $(readlink -f $FILE))"
-COMPILER_FLAGS="-interaction=nonstopmode $COMPILER_FLAGS"
 
 SIMPLERUN="yes" # If the compiler should be run more than once
+
+# =============================================================================
+# Bibliography
+# =============================================================================
 
 if [ -n "$BIBLIOGRAPHY" ]; then
     if [ "$BIBLIOGRAPHY" = "yes" ]; then
@@ -37,12 +45,40 @@ if [ -n "$BIBLIOGRAPHY" ]; then
 fi
 
 bibliography() {
-    $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "${PROJECT_NAME}.aux"
+    $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$PROJECT_NAME.aux"
 }
+
+# =============================================================================
+# Compiler
+# =============================================================================
+
+COMPILER="${COMPILER:-xelatex}"
+COMPILER_PATH="$(_get_and_check_binary "$COMPILER")"
+COMPILER_FLAGS="-interaction=nonstopmode $COMPILER_FLAGS"
 
 compile() {
     $COMPILER $COMPILER_FLAGS "$FILE_NAME"
 }
+
+# =============================================================================
+# Makeindex
+# =============================================================================
+
+if [ -n "$MAKEINDEX" ]; then
+    if [ "$MAKEINDEX" = "yes" ]; then
+        MAKEINDEX=makeindex
+    fi
+    MAKEINDEX_PATH="$(_get_and_check_binary $MAKEINDEX)"
+    SIMPLERUN="no"
+fi
+
+makeindex() {
+    $MAKEINDEX $MAKEINDEX_FLAGS "$PROJECT_NAME.idx"
+}
+
+# =============================================================================
+# Actual compilation
+# =============================================================================
 
 echo "
 --------------------------------------------------
@@ -53,6 +89,8 @@ Compiler flags:     $COMPILER_FLAGS
 Simple run?         $SIMPLERUN
 Bibliography:       $BIBLIOGRAPHY_PATH
 Bibliography flags: $BIBLIOGRAPHY_FLAGS
+Makeindex:          $MAKEINDEX_PATH
+Makeindex flags:    $MAKEINDEX_FLAGS
 --------------------------------------------------
 "
 
@@ -63,6 +101,10 @@ compile
 if [ -n "$BIBLIOGRAPHY" ]; then
     bibliography
     bibliography
+fi
+
+if [ -n "$MAKEINDEX" ]; then
+    makeindex
 fi
 
 if [ "$SIMPLERUN" = "no" ]; then

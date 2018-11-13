@@ -31,10 +31,12 @@ The compilation script reads the following environment variables:
 * `COMPILER_FLAGS` (default: none): Additional flags for the compiler. Note that the following flags are automatically prepended: `-interaction=nonstopmode`.
 * `COMPILER` (default: `xelatex`): Name of the compiler to use.
 * `FILE` (default: `/var/tex/main.tex`): Absolute or relative `.tex` file path.
+* `MAKEINDEX_FLAGS` (default: none): Additional flags for the index compiler.
+* `MAKEINDEX` (default: none): Builds index using the indicated compiler. If the value is `yes`, then `makeindex` is used. If none is specified, this step is skipped.
 
 # TODOs
 
-- [ ] Better script for build sequences
+- [X] Better script for build sequences
 - [ ] Separate build files from source files
 - [ ] Put build files in a temporary volume
 - [X] Use environment variables to tweak build
