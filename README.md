@@ -26,9 +26,11 @@ Alternatively, if the tex file is located at `/this/is/a/directory/src/project.t
 
 The compilation script reads the following environment variables:
 
+* `BIBLIOGRAPHY_FLAGS` (default: none): Additional flags for the bibliography compiler.
+* `BIBLIOGRAPHY` (default: none): Compiles bibliography using the indicated compiler (e.g. `bibtex`, `bibtex8`). If the value is `yes`, then `bibtex` is used. If none is specified, this step is skipped.
+* `COMPILER_FLAGS` (default: none): Additional flags for the compiler. Note that the following flags are automatically prepended: `-interaction=nonstopmode`.
 * `COMPILER` (default: `xelatex`): Name of the compiler to use.
-* `FILE` (default: `/var/tex/main.tex`): Absolute or relative file path.
-* `FLAGS` (default: none): Additional flags for the compiler. Note that the following flags are automatically prepended: `-interaction=nonstopmode`.
+* `FILE` (default: `/var/tex/main.tex`): Absolute or relative `.tex` file path.
 
 # TODOs
 

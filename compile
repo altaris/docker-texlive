@@ -1,5 +1,17 @@
 #!/bin/sh
 
+_get_and_check_binary() {
+    BINARY_PATH="$(which $1)"
+    if [ $? != 0 ]; then
+        echo "Binary $1 not found"
+        exit 1
+    elif [ ! -x "$BINARY_PATH" ]; then
+        echo "Binary $BINARY_PATH not executable"
+        exit 1
+    fi
+    echo $BINARY_PATH
+}
+
 FILE="${FILE:-/var/tex/main.tex}"
 if [ ! -r "$FILE" ]; then
     echo "File $FILE is not readable"
@@ -7,27 +19,54 @@ if [ ! -r "$FILE" ]; then
 fi
 
 COMPILER="${COMPILER:-xelatex}"
-COMPILERPATH="$(which $COMPILER)"
-if [ $? != 0 ]; then
-    echo "Compiler $COMPILER not found"
-    exit 1
-elif [ ! -x "$COMPILERPATH" ]; then
-    echo "Compiler $COMPILERPATH not executable"
-    exit 1
+COMPILER_PATH="$(_get_and_check_binary "$COMPILER")"
+
+FILE_NAME="$(basename $FILE)"
+PROJECT_NAME="$(basename $FILE_NAME .tex)"
+WORKINGDIR="$(dirname $(readlink -f $FILE))"
+COMPILER_FLAGS="-interaction=nonstopmode $COMPILER_FLAGS"
+
+SIMPLERUN="yes" # If the compiler should be run more than once
+
+if [ -n "$BIBLIOGRAPHY" ]; then
+    if [ "$BIBLIOGRAPHY" = "yes" ]; then
+        BIBLIOGRAPHY=bibtex
+    fi
+    BIBLIOGRAPHY_PATH="$(_get_and_check_binary $BIBLIOGRAPHY)"
+    SIMPLERUN="no"
 fi
 
-FILENAME="$(basename $FILE)"
-DIRPATH="$(dirname $(readlink -f $FILE))"
-FLAGS="-interaction=nonstopmode $FLAGS"
+bibliography() {
+    $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "${PROJECT_NAME}.aux"
+}
+
+compile() {
+    $COMPILER $COMPILER_FLAGS "$FILE_NAME"
+}
 
 echo "
 --------------------------------------------------
-Working directory: $DIRPATH
-File:              $FILENAME
-Compiler:          $COMPILERPATH
-Flags:             $FLAGS
+Working directory:  $WORKINGDIR
+File:               $FILE_NAME
+Compiler:           $COMPILER_PATH
+Compiler flags:     $COMPILER_FLAGS
+Simple run?         $SIMPLERUN
+Bibliography:       $BIBLIOGRAPHY_PATH
+Bibliography flags: $BIBLIOGRAPHY_FLAGS
 --------------------------------------------------
 "
 
-cd $DIRPATH
-$COMPILER $FLAGS $FILENAME
+cd $WORKINGDIR
+
+compile
+
+if [ -n "$BIBLIOGRAPHY" ]; then
+    bibliography
+    bibliography
+fi
+
+if [ "$SIMPLERUN" = "no" ]; then
+    compile
+fi
+
+compile
