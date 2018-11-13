@@ -100,7 +100,6 @@ compile
 
 if [ -n "$BIBLIOGRAPHY" ]; then
     bibliography
-    bibliography
 fi
 
 if [ -n "$MAKEINDEX" ]; then
