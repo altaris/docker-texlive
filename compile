@@ -1,0 +1,33 @@
+#!/bin/sh
+
+FILE="${FILE:-/var/tex/main.tex}"
+if [ ! -r "$FILE" ]; then
+    echo "File $FILE is not readable"
+    exit 1
+fi
+
+COMPILER="${COMPILER:-xelatex}"
+COMPILERPATH="$(which $COMPILER)"
+if [ $? != 0 ]; then
+    echo "Compiler $COMPILER not found"
+    exit 1
+elif [ ! -x "$COMPILERPATH" ]; then
+    echo "Compiler $COMPILERPATH not executable"
+    exit 1
+fi
+
+FILENAME="$(basename $FILE)"
+DIRPATH="$(dirname $(readlink -f $FILE))"
+FLAGS="-interaction=nonstopmode $FLAGS"
+
+echo "
+--------------------------------------------------
+Working directory: $DIRPATH
+File:              $FILENAME
+Compiler:          $COMPILERPATH
+Flags:             $FLAGS
+--------------------------------------------------
+"
+
+cd $DIRPATH
+$COMPILER $FLAGS $FILENAME
