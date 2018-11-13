@@ -4,6 +4,11 @@
 # Utilities
 # =============================================================================
 
+_fail() {
+    echo "Last compilation step failed, exiting"
+    exit 1
+}
+
 _get_and_check_binary() {
     BINARY_PATH="$(which $1)"
     if [ $? != 0 ]; then
@@ -96,18 +101,18 @@ Makeindex flags:    $MAKEINDEX_FLAGS
 
 cd $WORKINGDIR
 
-compile
+compile || _fail
 
 if [ -n "$BIBLIOGRAPHY" ]; then
-    bibliography
+    bibliography || _fail
 fi
 
 if [ -n "$MAKEINDEX" ]; then
-    makeindex
+    makeindex || _fail
 fi
 
 if [ "$SIMPLERUN" = "no" ]; then
-    compile
+    compile || _fail
 fi
 
-compile
+compile || _fail
