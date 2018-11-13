@@ -8,7 +8,7 @@ A dockerized texlive compiler.
 Let's say you have a tex project in directory `/this/is/a/directory`, and the main file is `main.tex`. Then run
 
 ```sh
-    docker run --rm \
+docker run --rm \
     --volume /this/is/a/directory:/var/tex \
     --env FLAGS="-shell-escape" \
     docker-texlive
@@ -17,11 +17,20 @@ Let's say you have a tex project in directory `/this/is/a/directory`, and the ma
 Alternatively, if the tex file is located at `/this/is/a/directory/src/project.tex`, then you can run
 
 ```sh
-    docker run --rm \
+docker run --rm \
     --volume /this/is/a/directory:/var/tex \
+    --env BIBLIOGRAPHY=yes \
     --env FILE=src/project.tex \
-    --env FLAGS="-shell-escape" \
     docker-texlive
+```
+
+or equivalently
+
+```sh
+docker run --rm \
+    --volume /this/is/a/directory:/var/tex \
+    --env BIBLIOGRAPHY=yes \
+    docker-texlive compile src/project.tex
 ```
 
 The compilation script reads the following environment variables:

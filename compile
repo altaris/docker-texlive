@@ -25,7 +25,12 @@ _get_and_check_binary() {
 # File & project
 # =============================================================================
 
-FILE="${FILE:-/var/tex/main.tex}"
+if [ -n "$1" ]; then
+    FILE="$(pwd)"/"$1"
+elif [ -z "$FILE" ]; then
+    FILE=/var/tex/main.tex
+fi
+
 if [ ! -r "$FILE" ]; then
     echo "File $FILE is not readable"
     exit 1
