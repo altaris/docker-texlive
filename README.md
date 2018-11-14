@@ -9,6 +9,8 @@ A dockerized texlive compiler.
 
 # Usage
 
+## With docker
+
 Let's say you have a tex project in directory `/this/is/a/directory`, and the main file is `main.tex`. Then run
 
 ```sh
@@ -51,3 +53,17 @@ The compilation script reads the following environment variables:
     - `-l $WORKING_DIR/$PROJECT_NAME.ilg`
 * `MAKEINDEX` (default: none): Builds index using the indicated compiler. If the value is `yes`, then `makeindex` is used. If none is specified, this step is skipped.
 * `WORKING_DIR` (default: `/tmp/tex`): Directory where auxiliary files are written. If value is `no`, then this variable is set to the directory of `$FILE`.
+
+## As a drone step
+
+Simply:
+
+```yaml
+build:
+  commands:
+    - compile src/main.tex
+  environment:
+    BIBLIOGRAPHY: yes
+    COMPILER_FLAGS: -shell-escape
+  image: altaris/docker-texlive
+```
