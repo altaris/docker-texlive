@@ -1,0 +1,72 @@
+\documentclass[10pt, final]{book}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{makeidx}
+
+\title{\texttt{docker-texlive} test}
+\author{James Bond}
+\date{Yesterday}
+
+\makeindex
+
+\newtheorem{theorem}{Serious theorem}[section]
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{The life of animals}
+
+\section{Cows}
+
+\begin{theorem} \label{th:cow}
+    The cow\index{Cow} says \emph{moo}\index{Cow!Moo}.
+\end{theorem}
+\begin{proof}
+    Left as an exercise to the reader.
+\end{proof}
+
+\section{Dogs}
+
+It is well knows that dogs are good boys \cite{ACampo2016,Escobar2017,Sergeev2007}. In this section, we prove the following:
+
+\begin{theorem} [Bone throw curve] \label{th:dog}
+    Let $\mathfrak{B}$ be a smooth bone\index{Dog!Bone}. Then the following hold.
+    \begin{enumerate}
+        \item For $f < \infty$ the initial force vector\index{Initial force vector} (also called the go-fetch\index{Go-fetch|see {Initial force vector}} direction \cite{Beilinson2010}), the curve $f \otimes \mathfrak{B}$ is smooth.
+        \item For $f < \infty$ the initial force vector, the dog-curve
+        \[ \partial_{\mathfrak{B}} = \int_{\mathrm{dog}}^{\mathrm{get bone}} d \otimes \mathfrak{B} \]
+        is smooth.
+        \item If $\partial_{\mathfrak{B}}$ contains a integral point $p$, and that this point is a \emph{moo} residual\index{Moo!residual} (see \ref{th:cow}), then the cow\index{Cow} $\mathfrak{C} = p^{-1}$ does not say \emph{moo}\index{Moo} anymore.
+    \end{enumerate}
+\end{theorem}
+
+Nice weather eh? Aliquam\index{Lorem ipsum} sint ab veniam velit et. Voluptatum fuga aliquam temporibus reiciendis. Porro fuga quisquam provident numquam. Qui voluptatem quisquam voluptas qui.
+
+Qui aut assumenda qui architecto porro et est commodi. Corrupti tempora libero sequi non architecto. Ut minima alias excepturi dicta enim. Ad sed quis libero voluptas consequatur consequatur nostrum.
+
+Harum et sint ut non iste laboriosam. Sint odit ipsa eaque ad. Adipisci ipsum sint perferendis architecto corporis eligendi consectetur repudiandae. Quaerat animi explicabo perferendis.
+
+Suscipit aperiam ab non. Dolorum quasi perspiciatis quod. Vel eaque nemo in asperiores ullam. Velit officia maiores et quo eos consequatur.
+
+Dolores quia cupiditate officiis molestiae omnis. Mollitia quo facilis perferendis ipsa. Asperiores voluptate alias ipsa voluptatem. Voluptatem consequatur delectus consequuntur est accusantium minus. Excepturi commodi et molestiae sint nobis. Aliquam et vero quaerat facere rem odit enim harum.
+
+
+\begin{proof} [Proof of \ref{th:dog}]
+    This is a direct consequence of Pythagoras's theorem\index{Pythagoras's theorem}.
+\end{proof}
+
+\nocite{*}
+\bibliographystyle{alpha}
+\bibliography{bibliography}
+
+\printindex
+
+\end{document}
