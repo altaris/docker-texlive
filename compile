@@ -64,12 +64,14 @@ if [ -n "$BIBLIOGRAPHY" ]; then
     SIMPLERUN="no"
 fi
 
-bibliography() {
+step_bibliography() {
     local MODE=p
     if [ "$WORKING_DIR" != "$PROJECT_DIR" ]; then
         MODE=a
     fi
-    openout_any=$MODE $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$WORKING_DIR"/"$PROJECT_NAME.aux"
+    for AUXFILE in "$WORKING_DIR"/*.aux ; do
+        openout_any=$MODE $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$AUXFILE"
+    done
 }
 
 # =============================================================================
@@ -80,7 +82,7 @@ COMPILER="${COMPILER:-xelatex}"
 COMPILER_PATH="$(_get_and_check_binary "$COMPILER")"
 COMPILER_FLAGS="-interaction=nonstopmode -output-directory $WORKING_DIR $COMPILER_FLAGS"
 
-compile() {
+step_compile() {
     $COMPILER $COMPILER_FLAGS "$FILE_NAME"
 }
 
@@ -96,10 +98,10 @@ if [ -n "$MAKEINDEX" ]; then
     SIMPLERUN="no"
 fi
 
-MAKEINDEX_FLAGS="-o $WORKING_DIR/$PROJECT_NAME.ind -l $WORKING_DIR/$PROJECT_NAME.ilg"
+MAKEINDEX_FLAGS="-o $WORKING_DIR/$PROJECT_NAME.ind -t $WORKING_DIR/$PROJECT_NAME.ilg $MAKEINDEX_FLAGS"
 
-makeindex() {
-    $MAKEINDEX $MAKEINDEX_FLAGS "$WORKING_DIR"/"$PROJECT_NAME.idx"
+step_makeindex() {
+    openout_any=a $MAKEINDEX $MAKEINDEX_FLAGS "$WORKING_DIR"/"$PROJECT_NAME.idx"
 }
 
 # =============================================================================
@@ -125,21 +127,21 @@ mkdir --parents "$WORKING_DIR"
 
 cd $PROJECT_DIR
 
-compile || _fail
+step_compile || _fail
 
 if [ -n "$BIBLIOGRAPHY" ]; then
-    bibliography || _fail
+    step_bibliography || _fail
 fi
 
 if [ -n "$MAKEINDEX" ]; then
-    makeindex || _fail
+    step_makeindex || _fail
 fi
 
 if [ "$SIMPLERUN" = "no" ]; then
-    compile || _fail
+    step_compile || _fail
 fi
 
-compile || _fail
+step_compile || _fail
 
 if [ "$WORKING_DIR" != "$PROJECT_DIR" ]; then
     cp "$WORKING_DIR"/"$PROJECT_NAME.pdf" .

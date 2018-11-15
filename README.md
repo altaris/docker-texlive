@@ -50,7 +50,7 @@ The compilation script reads the following environment variables:
 * `FILE` (default: `/var/tex/main.tex`): Absolute or relative `.tex` file path.
 * `MAKEINDEX_FLAGS` (default: none): Additional flags for the index compiler. Note that the following flags are automatically prepended:
     - `-o $WORKING_DIR/$PROJECT_NAME.ind`, where `PROJECT_NAME` is `$FILE` without the path and the `.tex`
-    - `-l $WORKING_DIR/$PROJECT_NAME.ilg`
+    - `-t $WORKING_DIR/$PROJECT_NAME.ilg`
 * `MAKEINDEX` (default: none): Builds index using the indicated compiler. If the value is `yes`, then `makeindex` is used. If none is specified, this step is skipped.
 * `WORKING_DIR` (default: `/tmp/tex`): Directory where auxiliary files are written. If value is `no`, then this variable is set to the directory of `$FILE`.
 
