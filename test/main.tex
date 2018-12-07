@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{makeidx}
+\usepackage{minted}
 
 \title{\texttt{docker-texlive} test}
 \author{James Bond}
@@ -60,7 +61,17 @@ Dolores quia cupiditate officiis molestiae omnis. Mollitia quo facilis perferend
 
 
 \begin{proof} [Proof of \ref{th:dog}]
-    This is a direct consequence of Pythagoras's theorem\index{Pythagoras's theorem}.
+    This is a direct consequence of Pythagoras's theorem\index{Pythagoras's theorem}. For more details, refer to the C++ implementation:
+    \begin{minted}{cpp}
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    cout << "SURPRIIIIIISE!!!!!" << endl;
+    return -1;
+}
+    \end{minted}
 \end{proof}
 
 \nocite{*}

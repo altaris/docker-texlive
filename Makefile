@@ -12,6 +12,8 @@ clean:
 test: build
 	$(SUDO) docker run --rm \
 	--volume $(shell pwd)/test:/var/tex \
+	--env COMPILER_FLAGS="-shell-escape" \
 	--env BIBLIOGRAPHY=yes \
 	--env MAKEINDEX=yes \
+	--env WORKING_DIR=no \
 	$(IMAGE)
