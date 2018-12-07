@@ -65,12 +65,8 @@ if [ -n "$BIBLIOGRAPHY" ]; then
 fi
 
 step_bibliography() {
-    local MODE=p
-    if [ "$WORKING_DIR" != "$PROJECT_DIR" ]; then
-        MODE=a
-    fi
     for AUXFILE in "$WORKING_DIR"/*.aux ; do
-        openout_any=$MODE $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$AUXFILE"
+        openout_any=a $BIBLIOGRAPHY $BIBLIOGRAPHY_FLAGS "$AUXFILE"
     done
 }
 
