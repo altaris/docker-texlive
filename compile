@@ -46,7 +46,7 @@ SIMPLERUN="yes" # If the compiler should be run more than once
 # Working dir
 # =============================================================================
 
-if [ "$WORKING_DIR" = "no" ]; then
+if [ "$WORKING_DIR" = "no" -o "$WORKING_DIR" = "NO" ]; then
     WORKING_DIR="$PROJECT_DIR"
 else
     WORKING_DIR="${WORKING_DIR:-/tmp/tex}"
@@ -57,7 +57,7 @@ fi
 # =============================================================================
 
 if [ -n "$BIBLIOGRAPHY" ]; then
-    if [ "$BIBLIOGRAPHY" = "yes" ]; then
+    if [ "$BIBLIOGRAPHY" = "yes" -o "$BIBLIOGRAPHY" = "YES" ]; then
         BIBLIOGRAPHY=bibtex
     fi
     BIBLIOGRAPHY_PATH="$(_get_and_check_binary $BIBLIOGRAPHY)"
@@ -91,7 +91,7 @@ step_compile() {
 # =============================================================================
 
 if [ -n "$MAKEINDEX" ]; then
-    if [ "$MAKEINDEX" = "yes" ]; then
+    if [ "$MAKEINDEX" = "yes" -o "$MAKEINDEX" = "YES" ]; then
         MAKEINDEX=makeindex
     fi
     MAKEINDEX_PATH="$(_get_and_check_binary $MAKEINDEX)"
