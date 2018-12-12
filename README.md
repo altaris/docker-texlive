@@ -63,7 +63,7 @@ build:
   commands:
     - compile src/main.tex
   environment:
-    BIBLIOGRAPHY: yes
+    BIBLIOGRAPHY: "yes"
     COMPILER_FLAGS: -shell-escape
   image: altaris/docker-texlive
 ```
