@@ -2,17 +2,35 @@ FROM debian:stretch
 
 MAINTAINER Cédric HT
 
-RUN apt-get --assume-yes update
-RUN apt-get --assume-yes install texlive-full
-RUN apt-get --assume-yes install curl python3
-RUN apt-get --assume-yes clean
-RUN rm --recursive --force /var/lib/apt/lists/*
+# texlive-full installation through apt
+# Separated from other installations for better recompilation time
+RUN `# Update package list`                                                && \
+    apt-get --assume-yes update                                            && \
+    `# Install packages`                                                   && \
+    apt-get --assume-yes install texlive-full                              && \
+    `# Cleanup`                                                            && \
+    apt-get --assume-yes clean                                             && \
+    rm --recursive --force /var/lib/apt/lists/*
 
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-RUN python3 get-pip.py
-RUN rm get-pip.py
-RUN pip install --no-cache-dir Pygments
-RUN rm --recursive --force /root/.cache/pip
+# Other package installation through apt
+RUN `# Update package list`                                                && \
+    apt-get --assume-yes update                                            && \
+    `# Install packages`                                                   && \
+    apt-get --assume-yes install curl                                      && \
+    apt-get --assume-yes install python3                                   && \
+    `# Cleanup`                                                            && \
+    apt-get --assume-yes clean                                             && \
+    rm --recursive --force /var/lib/apt/lists/*
+
+# Package installation through pip
+RUN `# Install pip`                                                        && \
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py                && \
+    python3 get-pip.py                                                     && \
+    rm get-pip.py                                                          && \
+    `# Install packages`                                                   && \
+    pip install --no-cache-dir Pygments                                    && \
+    `# Cleanup`                                                            && \
+    rm --recursive --force /root/.cache/pip 
 
 ENV PATH /app:$PATH
 
