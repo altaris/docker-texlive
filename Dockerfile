@@ -2,25 +2,9 @@ FROM alpine:latest
 
 MAINTAINER Cédric HT
 
-# texlive-full installation through apt
-# Separated from other installations for better recompilation time
-RUN `# Update package list`                                                && \
-    apt-get --assume-yes update                                            && \
-    `# Install packages`                                                   && \
-    apt-get --assume-yes install texlive-full                              && \
-    `# Cleanup`                                                            && \
-    apt-get --assume-yes clean                                             && \
-    rm --recursive --force /var/lib/apt/lists/*
-
-# Other package installation through apt
-RUN `# Update package list`                                                && \
-    apt-get --assume-yes update                                            && \
-    `# Install packages`                                                   && \
-    apt-get --assume-yes install curl                                      && \
-    apt-get --assume-yes install python3                                   && \
-    `# Cleanup`                                                            && \
-    apt-get --assume-yes clean                                             && \
-    rm --recursive --force /var/lib/apt/lists/*
+RUN apk add --no-cache texlive-full
+RUN apk add --no-cache curl
+RUN apk add --no-cache python3
 
 # Package installation through pip
 RUN `# Install pip`                                                        && \
