@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM alpine:latest
 
 MAINTAINER Cédric HT
 
