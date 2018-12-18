@@ -25,4 +25,4 @@ test: build
 	--env BIBLIOGRAPHY=yes \
 	--env MAKEINDEX=yes \
 	--env WORKING_DIR=no \
-	$(IMAGE)
+	$(IMAGE):$$(git rev-parse --abbrev-ref HEAD)
