@@ -14,7 +14,7 @@ RUN `# Install pip`                                                        && \
     `# Install packages`                                                   && \
     pip install --no-cache-dir Pygments                                    && \
     `# Cleanup`                                                            && \
-    rm --recursive --force /root/.cache/pip 
+    rm -rf /root/.cache/pip 
 
 ENV PATH /app:$PATH
 
