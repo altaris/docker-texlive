@@ -16,7 +16,7 @@ Let's say you have a tex project in directory `/this/is/a/directory`, and the ma
 ```sh
 docker run --rm \
     --volume /this/is/a/directory:/var/tex \
-    --env FLAGS="-shell-escape" \
+    --env COMPILER_FLAGS="-shell-escape" \
     docker-texlive
 ```
 
@@ -25,8 +25,8 @@ Alternatively, if the tex file is located at `/this/is/a/directory/src/project.t
 ```sh
 docker run --rm \
     --volume /this/is/a/directory:/var/tex \
-    --env BIBLIOGRAPHY=yes \
-    --env FILE=src/project.tex \
+    --env BIBLIOGRAPHY="yes" \
+    --env FILE="src/project.tex" \
     docker-texlive
 ```
 
@@ -35,7 +35,7 @@ or equivalently
 ```sh
 docker run --rm \
     --volume /this/is/a/directory:/var/tex \
-    --env BIBLIOGRAPHY=yes \
+    --env BIBLIOGRAPHY="yes" \
     docker-texlive compile src/project.tex
 ```
 
@@ -64,6 +64,6 @@ build:
     - compile src/main.tex
   environment:
     BIBLIOGRAPHY: "yes"
-    COMPILER_FLAGS: -shell-escape
+    COMPILER_FLAGS: "-shell-escape"
   image: altaris/docker-texlive
 ```
