@@ -1,7 +1,9 @@
 FROM alpine:latest
 
+# Metadatas
 MAINTAINER Cédric HT
 
+# Package installation through apk
 RUN apk add --no-cache texlive-full
 RUN apk add --no-cache curl
 RUN apk add --no-cache python3
@@ -16,10 +18,13 @@ RUN `# Install pip`                                                        && \
     `# Cleanup`                                                            && \
     rm -rf /root/.cache/pip 
 
-ENV PATH /app:$PATH
+# Rebuild font cache
+RUN ln -s /usr/share/texmf-dist/fonts/ /usr/share/ && fc-cache -fs
 
+# Setup executables
+ENV PATH /app:$PATH
 COPY compile /app/
 
+# Initial state
 WORKDIR /var/tex
-
 CMD compile
